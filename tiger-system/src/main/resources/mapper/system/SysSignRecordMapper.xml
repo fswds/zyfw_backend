@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tiger.system.mapper.SysSignRecordMapper">
+    
+    <resultMap type="SysSignRecord" id="SysSignRecordResult">
+        <result property="id"    column="id"    />
+        <result property="activityId"    column="activity_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="signDate"    column="sign_date"    />
+        <result property="examineStatus"    column="examine_status"    />
+        <result property="examineImg"    column="examine_img"    />
+        <result property="signNoticeId"    column="sign_notice_id"    />
+        <result property="extra"    column="extra"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectSysSignRecordVo">
+        select id, activity_id, user_id, sign_date, examine_status, examine_img, extra, create_time, update_time,sign_notice_id from sys_sign_record
+    </sql>
+
+    <select id="selectSysSignRecordList" parameterType="SysSignRecord" resultMap="SysSignRecordResult">
+        <include refid="selectSysSignRecordVo"/>
+        <where>  
+            <if test="activityId != null "> and activity_id = #{activityId}</if>
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="signDate != null "> and sign_date = #{signDate}</if>
+            <if test="examineStatus != null  and examineStatus != ''"> and examine_status = #{examineStatus}</if>
+            <if test="extra != null  and extra != ''"> and extra = #{extra}</if>
+            <if test="signNoticeId != null "> and sign_notice_id = #{signNoticeId}</if>
+        </where>
+    </select>
+    
+    <select id="selectSysSignRecordById" parameterType="Long" resultMap="SysSignRecordResult">
+        <include refid="selectSysSignRecordVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertSysSignRecord" parameterType="SysSignRecord">
+        insert into sys_sign_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="activityId != null">activity_id,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="signDate != null">sign_date,</if>
+            <if test="examineStatus != null and examineStatus != ''">examine_status,</if>
+            <if test="examineImg != null and examineImg != ''">examine_img,</if>
+            <if test="extra != null">extra,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="signNoticeId != null">sign_notice_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="activityId != null">#{activityId},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="signDate != null">#{signDate},</if>
+            <if test="examineStatus != null and examineStatus != ''">#{examineStatus},</if>
+            <if test="examineImg != null and examineImg != ''">#{examineImg},</if>
+            <if test="extra != null">#{extra},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="signNoticeId != null">#{signNoticeId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysSignRecord" parameterType="SysSignRecord">
+        update sys_sign_record
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="activityId != null">activity_id = #{activityId},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="signDate != null">sign_date = #{signDate},</if>
+            <if test="examineStatus != null and examineStatus != ''">examine_status = #{examineStatus},</if>
+            <if test="examineImg != null and examineImg != ''">examine_img = #{examineImg},</if>
+            <if test="extra != null">extra = #{extra},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="signNoticeId != null">sign_notice_id = #{signNoticeId},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSysSignRecordById" parameterType="Long">
+        delete from sys_sign_record where id = #{id}
+    </delete>
+
+    <delete id="deleteSysSignRecordByIds" parameterType="String">
+        delete from sys_sign_record where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
