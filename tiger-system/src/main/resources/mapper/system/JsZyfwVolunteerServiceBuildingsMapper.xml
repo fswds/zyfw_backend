@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tiger.system.mapper.JsZyfwVolunteerServiceBuildingsMapper">
+    
+    <resultMap type="JsZyfwVolunteerServiceBuildings" id="JsZyfwVolunteerServiceBuildingsResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="address"    column="address"    />
+        <result property="isAvailable"    column="is_available"    />
+    </resultMap>
+
+    <sql id="selectJsZyfwVolunteerServiceBuildingsVo">
+        select id, name, address, is_available from js_zyfw_volunteer_service_buildings
+    </sql>
+
+    <select id="selectJsZyfwVolunteerServiceBuildingsList" parameterType="JsZyfwVolunteerServiceBuildings" resultMap="JsZyfwVolunteerServiceBuildingsResult">
+        <include refid="selectJsZyfwVolunteerServiceBuildingsVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="address != null  and address != ''"> and address = #{address}</if>
+            <if test="isAvailable != null "> and is_available = #{isAvailable}</if>
+        </where>
+    </select>
+    
+    <select id="selectJsZyfwVolunteerServiceBuildingsById" parameterType="Long" resultMap="JsZyfwVolunteerServiceBuildingsResult">
+        <include refid="selectJsZyfwVolunteerServiceBuildingsVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertJsZyfwVolunteerServiceBuildings" parameterType="JsZyfwVolunteerServiceBuildings" useGeneratedKeys="true" keyProperty="id">
+        insert into js_zyfw_volunteer_service_buildings
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">name,</if>
+            <if test="address != null">address,</if>
+            <if test="isAvailable != null">is_available,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="address != null">#{address},</if>
+            <if test="isAvailable != null">#{isAvailable},</if>
+         </trim>
+    </insert>
+
+    <update id="updateJsZyfwVolunteerServiceBuildings" parameterType="JsZyfwVolunteerServiceBuildings">
+        update js_zyfw_volunteer_service_buildings
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="address != null">address = #{address},</if>
+            <if test="isAvailable != null">is_available = #{isAvailable},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteJsZyfwVolunteerServiceBuildingsById" parameterType="Long">
+        delete from js_zyfw_volunteer_service_buildings where id = #{id}
+    </delete>
+
+    <delete id="deleteJsZyfwVolunteerServiceBuildingsByIds" parameterType="String">
+        delete from js_zyfw_volunteer_service_buildings where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

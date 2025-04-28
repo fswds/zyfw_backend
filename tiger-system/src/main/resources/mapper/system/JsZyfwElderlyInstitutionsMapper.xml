@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tiger.system.mapper.JsZyfwElderlyInstitutionsMapper">
+    
+    <resultMap type="JsZyfwElderlyInstitutions" id="JsZyfwElderlyInstitutionsResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="location"    column="location"    />
+        <result property="buildingInfo"    column="building_info"    />
+        <result property="description"    column="description"    />
+        <result property="serviceType"    column="service_type"    />
+    </resultMap>
+
+    <sql id="selectJsZyfwElderlyInstitutionsVo">
+        select id, name, location, building_info, description, service_type from js_zyfw_elderly_institutions
+    </sql>
+
+    <select id="selectJsZyfwElderlyInstitutionsList" parameterType="JsZyfwElderlyInstitutions" resultMap="JsZyfwElderlyInstitutionsResult">
+        <include refid="selectJsZyfwElderlyInstitutionsVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="location != null  and location != ''"> and location = #{location}</if>
+            <if test="buildingInfo != null  and buildingInfo != ''"> and building_info = #{buildingInfo}</if>
+            <if test="description != null  and description != ''"> and description = #{description}</if>
+            <if test="serviceType != null  and serviceType != ''"> and service_type = #{serviceType}</if>
+        </where>
+    </select>
+    
+    <select id="selectJsZyfwElderlyInstitutionsById" parameterType="Long" resultMap="JsZyfwElderlyInstitutionsResult">
+        <include refid="selectJsZyfwElderlyInstitutionsVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertJsZyfwElderlyInstitutions" parameterType="JsZyfwElderlyInstitutions" useGeneratedKeys="true" keyProperty="id">
+        insert into js_zyfw_elderly_institutions
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">name,</if>
+            <if test="location != null">location,</if>
+            <if test="buildingInfo != null">building_info,</if>
+            <if test="description != null">description,</if>
+            <if test="serviceType != null">service_type,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null">#{name},</if>
+            <if test="location != null">#{location},</if>
+            <if test="buildingInfo != null">#{buildingInfo},</if>
+            <if test="description != null">#{description},</if>
+            <if test="serviceType != null">#{serviceType},</if>
+         </trim>
+    </insert>
+
+    <update id="updateJsZyfwElderlyInstitutions" parameterType="JsZyfwElderlyInstitutions">
+        update js_zyfw_elderly_institutions
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null">name = #{name},</if>
+            <if test="location != null">location = #{location},</if>
+            <if test="buildingInfo != null">building_info = #{buildingInfo},</if>
+            <if test="description != null">description = #{description},</if>
+            <if test="serviceType != null">service_type = #{serviceType},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteJsZyfwElderlyInstitutionsById" parameterType="Long">
+        delete from js_zyfw_elderly_institutions where id = #{id}
+    </delete>
+
+    <delete id="deleteJsZyfwElderlyInstitutionsByIds" parameterType="String">
+        delete from js_zyfw_elderly_institutions where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

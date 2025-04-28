@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tiger.system.mapper.JsZyfwMeetingsMapper">
+    
+    <resultMap type="JsZyfwMeetings" id="JsZyfwMeetingsResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="startTime"    column="start_time"    />
+        <result property="endTime"    column="end_time"    />
+        <result property="address"    column="address"    />
+        <result property="organizationId"    column="organization_id"    />
+        <result property="leaderName"    column="leader_name"    />
+        <result property="leaderNumber"    column="leader_number"    />
+    </resultMap>
+
+    <sql id="selectJsZyfwMeetingsVo">
+        select id, name, start_time, end_time, address, organization_id, leader_name, leader_number from js_zyfw_meetings
+    </sql>
+
+    <select id="selectJsZyfwMeetingsList" parameterType="JsZyfwMeetings" resultMap="JsZyfwMeetingsResult">
+        <include refid="selectJsZyfwMeetingsVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="startTime != null "> and start_time = #{startTime}</if>
+            <if test="endTime != null "> and end_time = #{endTime}</if>
+            <if test="address != null  and address != ''"> and address = #{address}</if>
+            <if test="organizationId != null "> and organization_id = #{organizationId}</if>
+            <if test="leaderName != null  and leaderName != ''"> and leader_name like concat('%', #{leaderName}, '%')</if>
+            <if test="leaderNumber != null  and leaderNumber != ''"> and leader_number = #{leaderNumber}</if>
+        </where>
+    </select>
+    
+    <select id="selectJsZyfwMeetingsById" parameterType="Long" resultMap="JsZyfwMeetingsResult">
+        <include refid="selectJsZyfwMeetingsVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertJsZyfwMeetings" parameterType="JsZyfwMeetings" useGeneratedKeys="true" keyProperty="id">
+        insert into js_zyfw_meetings
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">name,</if>
+            <if test="startTime != null">start_time,</if>
+            <if test="endTime != null">end_time,</if>
+            <if test="address != null">address,</if>
+            <if test="organizationId != null">organization_id,</if>
+            <if test="leaderName != null and leaderName != ''">leader_name,</if>
+            <if test="leaderNumber != null and leaderNumber != ''">leader_number,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="startTime != null">#{startTime},</if>
+            <if test="endTime != null">#{endTime},</if>
+            <if test="address != null">#{address},</if>
+            <if test="organizationId != null">#{organizationId},</if>
+            <if test="leaderName != null and leaderName != ''">#{leaderName},</if>
+            <if test="leaderNumber != null and leaderNumber != ''">#{leaderNumber},</if>
+         </trim>
+    </insert>
+
+    <update id="updateJsZyfwMeetings" parameterType="JsZyfwMeetings">
+        update js_zyfw_meetings
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="startTime != null">start_time = #{startTime},</if>
+            <if test="endTime != null">end_time = #{endTime},</if>
+            <if test="address != null">address = #{address},</if>
+            <if test="organizationId != null">organization_id = #{organizationId},</if>
+            <if test="leaderName != null and leaderName != ''">leader_name = #{leaderName},</if>
+            <if test="leaderNumber != null and leaderNumber != ''">leader_number = #{leaderNumber},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteJsZyfwMeetingsById" parameterType="Long">
+        delete from js_zyfw_meetings where id = #{id}
+    </delete>
+
+    <delete id="deleteJsZyfwMeetingsByIds" parameterType="String">
+        delete from js_zyfw_meetings where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
