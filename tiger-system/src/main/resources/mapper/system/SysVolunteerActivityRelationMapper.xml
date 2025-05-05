@@ -101,7 +101,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                svar.status as userApprovalStatus
         from sys_activity sa left join sys_volunteer_activity_relation svar on sa.id=svar.activity_id
                              left join sys_volunteer sv on sv.user_id = svar.user_id
-        where svar.id = #{id} group by svar.id
+        where svar.id = #{id}
     </select>
         
     <insert id="insertSysVolunteerActivityRelation" parameterType="SysVolunteerActivityRelation" useGeneratedKeys="true" keyProperty="id">
