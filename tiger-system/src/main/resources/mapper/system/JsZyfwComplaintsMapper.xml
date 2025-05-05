@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tiger.system.mapper.JsZyfwComplaintsMapper">
+    
+    <resultMap type="JsZyfwComplaints" id="JsZyfwComplaintsResult">
+        <result property="id"    column="id"    />
+        <result property="volunteerId"    column="volunteer_id"    />
+        <result property="complaintContent"    column="complaint_content"    />
+        <result property="complaintTime"    column="complaint_time"    />
+    </resultMap>
+
+    <sql id="selectJsZyfwComplaintsVo">
+        select id, volunteer_id, complaint_content, complaint_time from js_zyfw_complaints
+    </sql>
+
+    <select id="selectJsZyfwComplaintsList" parameterType="JsZyfwComplaints" resultMap="JsZyfwComplaintsResult">
+        <include refid="selectJsZyfwComplaintsVo"/>
+        <where>  
+            <if test="volunteerId != null "> and volunteer_id = #{volunteerId}</if>
+            <if test="complaintContent != null  and complaintContent != ''"> and complaint_content = #{complaintContent}</if>
+            <if test="complaintTime != null "> and complaint_time = #{complaintTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectJsZyfwComplaintsById" parameterType="Long" resultMap="JsZyfwComplaintsResult">
+        <include refid="selectJsZyfwComplaintsVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertJsZyfwComplaints" parameterType="JsZyfwComplaints" useGeneratedKeys="true" keyProperty="id">
+        insert into js_zyfw_complaints
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="volunteerId != null">volunteer_id,</if>
+            <if test="complaintContent != null">complaint_content,</if>
+            <if test="complaintTime != null">complaint_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="volunteerId != null">#{volunteerId},</if>
+            <if test="complaintContent != null">#{complaintContent},</if>
+            <if test="complaintTime != null">#{complaintTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateJsZyfwComplaints" parameterType="JsZyfwComplaints">
+        update js_zyfw_complaints
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="volunteerId != null">volunteer_id = #{volunteerId},</if>
+            <if test="complaintContent != null">complaint_content = #{complaintContent},</if>
+            <if test="complaintTime != null">complaint_time = #{complaintTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteJsZyfwComplaintsById" parameterType="Long">
+        delete from js_zyfw_complaints where id = #{id}
+    </delete>
+
+    <delete id="deleteJsZyfwComplaintsByIds" parameterType="String">
+        delete from js_zyfw_complaints where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

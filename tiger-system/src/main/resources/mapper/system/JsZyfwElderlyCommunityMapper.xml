@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tiger.system.mapper.JsZyfwElderlyCommunityMapper">
+    
+    <resultMap type="JsZyfwElderlyCommunity" id="JsZyfwElderlyCommunityResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="age"    column="age"    />
+        <result property="gender"    column="gender"    />
+        <result property="birthday"    column="birthday"    />
+        <result property="healthStatus"    column="health_status"    />
+        <result property="medicationHistory"    column="medication_history"    />
+        <result property="communicationExperience"    column="communication_experience"    />
+        <result property="familyStatus"    column="family_status"    />
+    </resultMap>
+
+    <sql id="selectJsZyfwElderlyCommunityVo">
+        select id, name, age, gender, birthday, health_status, medication_history, communication_experience, family_status from js_zyfw_elderly_community
+    </sql>
+
+    <select id="selectJsZyfwElderlyCommunityList" parameterType="JsZyfwElderlyCommunity" resultMap="JsZyfwElderlyCommunityResult">
+        <include refid="selectJsZyfwElderlyCommunityVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="age != null "> and age = #{age}</if>
+            <if test="gender != null  and gender != ''"> and gender = #{gender}</if>
+            <if test="birthday != null "> and birthday = #{birthday}</if>
+            <if test="healthStatus != null  and healthStatus != ''"> and health_status = #{healthStatus}</if>
+            <if test="medicationHistory != null  and medicationHistory != ''"> and medication_history = #{medicationHistory}</if>
+            <if test="communicationExperience != null  and communicationExperience != ''"> and communication_experience = #{communicationExperience}</if>
+            <if test="familyStatus != null  and familyStatus != ''"> and family_status = #{familyStatus}</if>
+        </where>
+    </select>
+    
+    <select id="selectJsZyfwElderlyCommunityById" parameterType="Long" resultMap="JsZyfwElderlyCommunityResult">
+        <include refid="selectJsZyfwElderlyCommunityVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertJsZyfwElderlyCommunity" parameterType="JsZyfwElderlyCommunity" useGeneratedKeys="true" keyProperty="id">
+        insert into js_zyfw_elderly_community
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">name,</if>
+            <if test="age != null">age,</if>
+            <if test="gender != null">gender,</if>
+            <if test="birthday != null">birthday,</if>
+            <if test="healthStatus != null">health_status,</if>
+            <if test="medicationHistory != null">medication_history,</if>
+            <if test="communicationExperience != null">communication_experience,</if>
+            <if test="familyStatus != null">family_status,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null">#{name},</if>
+            <if test="age != null">#{age},</if>
+            <if test="gender != null">#{gender},</if>
+            <if test="birthday != null">#{birthday},</if>
+            <if test="healthStatus != null">#{healthStatus},</if>
+            <if test="medicationHistory != null">#{medicationHistory},</if>
+            <if test="communicationExperience != null">#{communicationExperience},</if>
+            <if test="familyStatus != null">#{familyStatus},</if>
+         </trim>
+    </insert>
+
+    <update id="updateJsZyfwElderlyCommunity" parameterType="JsZyfwElderlyCommunity">
+        update js_zyfw_elderly_community
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null">name = #{name},</if>
+            <if test="age != null">age = #{age},</if>
+            <if test="gender != null">gender = #{gender},</if>
+            <if test="birthday != null">birthday = #{birthday},</if>
+            <if test="healthStatus != null">health_status = #{healthStatus},</if>
+            <if test="medicationHistory != null">medication_history = #{medicationHistory},</if>
+            <if test="communicationExperience != null">communication_experience = #{communicationExperience},</if>
+            <if test="familyStatus != null">family_status = #{familyStatus},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteJsZyfwElderlyCommunityById" parameterType="Long">
+        delete from js_zyfw_elderly_community where id = #{id}
+    </delete>
+
+    <delete id="deleteJsZyfwElderlyCommunityByIds" parameterType="String">
+        delete from js_zyfw_elderly_community where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

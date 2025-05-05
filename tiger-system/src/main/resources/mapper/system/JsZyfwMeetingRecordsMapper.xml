@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tiger.system.mapper.JsZyfwMeetingRecordsMapper">
+    
+    <resultMap type="JsZyfwMeetingRecords" id="JsZyfwMeetingRecordsResult">
+        <result property="id"    column="id"    />
+        <result property="meetingId"    column="meeting_id"    />
+        <result property="content"    column="content"    />
+        <result property="result"    column="result"    />
+    </resultMap>
+
+    <sql id="selectJsZyfwMeetingRecordsVo">
+        select id, meeting_id, content, result from js_zyfw_meeting_records
+    </sql>
+
+    <select id="selectJsZyfwMeetingRecordsList" parameterType="JsZyfwMeetingRecords" resultMap="JsZyfwMeetingRecordsResult">
+        <include refid="selectJsZyfwMeetingRecordsVo"/>
+        <where>  
+            <if test="meetingId != null "> and meeting_id = #{meetingId}</if>
+            <if test="content != null  and content != ''"> and content = #{content}</if>
+            <if test="result != null  and result != ''"> and result = #{result}</if>
+        </where>
+    </select>
+    
+    <select id="selectJsZyfwMeetingRecordsById" parameterType="Long" resultMap="JsZyfwMeetingRecordsResult">
+        <include refid="selectJsZyfwMeetingRecordsVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertJsZyfwMeetingRecords" parameterType="JsZyfwMeetingRecords" useGeneratedKeys="true" keyProperty="id">
+        insert into js_zyfw_meeting_records
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="meetingId != null">meeting_id,</if>
+            <if test="content != null">content,</if>
+            <if test="result != null">result,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="meetingId != null">#{meetingId},</if>
+            <if test="content != null">#{content},</if>
+            <if test="result != null">#{result},</if>
+         </trim>
+    </insert>
+
+    <update id="updateJsZyfwMeetingRecords" parameterType="JsZyfwMeetingRecords">
+        update js_zyfw_meeting_records
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="meetingId != null">meeting_id = #{meetingId},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="result != null">result = #{result},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteJsZyfwMeetingRecordsById" parameterType="Long">
+        delete from js_zyfw_meeting_records where id = #{id}
+    </delete>
+
+    <delete id="deleteJsZyfwMeetingRecordsByIds" parameterType="String">
+        delete from js_zyfw_meeting_records where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
